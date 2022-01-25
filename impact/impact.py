@@ -1,3 +1,4 @@
+from xmlrpc.client import boolean
 from .parsers import parse_impact_input, load_many_fort, FORT_STAT_TYPES, FORT_DIPOLE_STAT_TYPES, FORT_PARTICLE_TYPES, FORT_SLICE_TYPES, header_str, header_bookkeeper, parse_impact_particles, load_stats, load_slice_info, fort_files
 from . import archive, writers, fieldmaps, tools
 from .lattice import ele_dict_from, ele_str, get_stop, set_stop, insert_ele_by_s
@@ -48,6 +49,7 @@ class Impact(CommandWrapper):
         self.output = {}
         self._units = {}
         self.group = {}
+        self._use_mpi = False
 
         # Convenience lookup of elements in lattice by name
         self.ele = {}
@@ -66,6 +68,14 @@ class Impact(CommandWrapper):
 
         else:
             self.vprint('Warning: Input file does not exist. Not configured. Please set header and lattice.')
+
+    @property
+    def use_mpi(self):
+        return self._use_mpi
+
+    @use_mpi.setter
+    def use_mpi(self, set_value: bool):
+        self._use_mpi = set_value
 
     def add_ele(self, ele):
         """
@@ -245,11 +255,11 @@ class Impact(CommandWrapper):
 
         if self.use_mpi and n ==1:
             self.vprint('Disabling MPI')
-            self.use_mpi = False
+            self.use_mpi(False)
 
         if n > 1 and not self.use_mpi:
             self.vprint('Enabling MPI')
-            self.use_mpi = True
+            self.use_mpi(True)
 
     def get_run_script(self, write_to_path=True):
         """
