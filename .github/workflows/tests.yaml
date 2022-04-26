@@ -28,7 +28,8 @@ jobs:
           mamba install --yes --file requirements.txt
           mamba install --yes --file dev-requirements.txt
           mamba install impact-t
-          pip install -e . --no-dependencies
+          pip install -e .
+      - name: Run tests
         shell: bash -l {0}
         run: |
           pytest
