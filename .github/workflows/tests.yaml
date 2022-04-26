@@ -3,7 +3,7 @@ name: Run tests
 on:
   push:
     branches:
-      - setup-pytest
+      - master
 
 jobs:
   build:
@@ -15,7 +15,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
-          ref: setup-pytest
+          ref: master
       - uses: conda-incubator/setup-miniconda@v2
         with:
           python-version: ${{ matrix.python-version }}
